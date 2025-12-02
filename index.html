@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قرطة من إنتاج حبيب</title>
+<style>
+body {margin:0;font-family:'Arial',sans-serif;text-align:center;background-color:#f2f2f2;}
+#modeSelect {
+    position: relative;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    width:100vw; height:100vh;
+    display:flex; flex-direction:column; justify-content:flex-start; align-items:center;
+    padding-top:60px; color:white; overflow:hidden;
+}
+#modeSelect h1 {margin:0; white-space: nowrap; text-shadow:2px 2px 8px #000;}
+#modeSelect h2 {font-size:28px; margin-bottom:30px; color:black;}
+#modeSelect img {width:100px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.5); cursor:pointer;}
+.modes {display:flex; gap:30px; flex-wrap:wrap; justify-content:center; margin-top:30px;}
+.modes div{text-align:center;}
+.title-box {background:rgba(0,0,0,0.5); padding:15px 30px; border-radius:15px; margin-bottom:20px;}
+</style>
+</head>
+<body>
+
+<div id="modeSelect">
+    <div class="title-box">
+        <h1>قرطة من إنتاج</h1>
+        <h1>حبيب</h1>
+    </div>
+    <h2>اختر مود اللعبة:</h2>
+    <div class="modes">
+        <div>
+            <img src="pinaki.jpg" onclick="window.location.href='pinaki.html'">
+            <p>Pinaki</p>
+        </div>
+        <div>
+            <img src="munfi.jpg" onclick="window.location.href='munfi.html'">
+            <p>Munfi</p>
+        </div>
+        <div>
+            <img src="sisad.jpg" onclick="window.location.href='sisad.html'">
+            <p>Sisad</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

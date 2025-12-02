@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinaki</title>
+<style>
+body {margin:0;font-family:'Arial',sans-serif;text-align:center;background-color:#f2f2f2;}
+button {padding:10px 20px;margin:5px;font-size:18px;cursor:pointer;border-radius:8px;border:2px solid #2c3e50;background-color:#fff;transition:0.2s;}
+button:hover{background-color:#2c3e50;color:#fff;}
+.teams{display:flex; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap;}
+.team{text-align:center;width:45%;}
+input[type=text],input[type=number]{padding:10px;font-size:16px;width:90%;margin-bottom:10px;border-radius:8px;border:2px solid #2c3e50;}
+#scores{margin-top:20px;font-size:28px;font-weight:bold;color:#34495e;}
+#history{margin-top:20px;font-size:16px;max-height:300px;overflow-y:auto;border-top:1px solid #ccc;padding-top:10px;text-align:right;}
+#winOverlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background: rgba(0,0,0,0.7);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;}
+#winOverlay button{margin-top:20px;padding:10px 20px;font-size:24px;border:none;border-radius:10px;cursor:pointer;background-color:#fff;color:#2c3e50;}
+#winOverlay button:hover{background-color:#2c3e50;color:#fff;}
+#backBtn{margin-bottom:20px;background-color:#2c3e50;color:#fff;}
+#backBtn:hover{background-color:#34495e;}
+</style>
+</head>
+<body>
+
+<button id="backBtn" onclick="window.location.href='index.html'">مودات</button>
+
+<div class="teams" id="teamsContainer"></div>
+<div id="scores"></div>
+<div id="history">
+    <strong>سجل الجولات:</strong>
+    <div id="roundHistory"></div>
+</div>
+
+<div id="winOverlay">
+    <div id="winText"></div>
+    <button onclick="closeOverlay()">حسناً</button>
+</div>
+
+<script>
+let modeInfo = {players:2, target:52, type:'team', colors:['#ff8c00','#32cd32']};
+let scores=[0,0];
+let target=52;
+let playerNames=['',''];
+
+function init(){
+    let container=document.getElementById('teamsContainer');
+    container.innerHTML='';
+    for(let i=0;i<modeInfo.players;i++){
+        let div=document.createElement('div');
+        div.className='team';
+        div.innerHTML=`
+            <input type="text" id="team${i+1}Name" placeholder="اسم الفريق ${i+1}" style="background-color:${modeInfo.colors[i]}">
+            <input type="number" id="team${i+1}ScoreInput" placeholder="أدخل الرقم" style="background-color:${modeInfo.colors[i]}">
+            <div class="points">
+                <button onclick="applyPoints(${i+1}, false)">+ الرقم</button>
+                <button onclick="applyPoints(${i+1}, true)">- الرقم</button>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+}
+function applyPoints(player,isSubtract){
+    let idx=player-1;
+    let points=Number(document.getElementById(`team${player}ScoreInput`).value)||0;
+    if(isSubtract) points=-points;
+    scores[idx]+=points;
+    playerNames[idx]=document.getElementById(`team${player}Name`).value||(`Team${player}`);
+    document.getElementById('roundHistory').innerHTML+=`<p>${playerNames[idx]}: ${points>0?'+'+points:points}</p>`;
+    document.getElementById(`team${player}ScoreInput`).value='';
+    updateDisplay();
+    checkWin();
+}
+function updateDisplay(){
+    let display = scores.map(s=>'('+s+')').join(' | ');
+    document.getElementById('scores').innerText = `${display} | الهدف: (${target})`;
+}
+function checkWin(){
+    let maxScore=Math.max(...scores);
+    let winners=scores.map((s,i)=>s===maxScore?i:-1).filter(i=>i!==-1);
+    if(maxScore>=target && winners.length===1) showWinEffect(playerNames[winners[0]]);
+}
+function showWinEffect(name){
+    document.getElementById('winText').innerText=`${name} فاز! 🎉`;
+    document.getElementById('winOverlay').style.display='flex';
+}
+function closeOverlay(){
+    document.getElementById('winOverlay').style.display='none';
+    scores=Array(modeInfo.players).fill(0);
+    document.getElementById('roundHistory').innerHTML='';
+    updateDisplay();
+}
+window.onload=init;
+</script>
+
+</body>
+</html>
